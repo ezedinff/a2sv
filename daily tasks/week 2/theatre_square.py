@@ -1,4 +1,5 @@
 """
+https://codeforces.com/problemset/problem/1/A
 Theatre Square in the capital city of Berland has a rectangular shape with the size n×m meters. On the occasion of
 the city's anniversary, a decision was taken to pave the Square with square granite flagstones. Each flagstone is of
 the size a×a.
