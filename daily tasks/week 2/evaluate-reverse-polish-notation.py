@@ -17,6 +17,7 @@ Input: tokens = ["2","1","+","3","*"]
 Output: 9
 Explanation: ((2 + 1) * 3) = 9
 """
+import math
 import unittest
 from typing import List
 
@@ -35,11 +36,14 @@ def evalRPN(tokens: List[str]) -> int:
             if token == "+":
                 stack.append(firstNumber + secondNumber)
             elif token == "-":
-                stack.append(firstNumber - secondNumber)
+                stack.append(secondNumber - firstNumber)
             elif token == "*":
                 stack.append(firstNumber * secondNumber)
             elif token == "/":
-                stack.append(firstNumber / secondNumber)
+                if secondNumber / firstNumber < 0:
+                    stack.append(math.ceil(secondNumber / firstNumber))
+                else:
+                    stack.append(math.floor(secondNumber / firstNumber))
         else:
             stack.append(int(token))
     return stack[0]
