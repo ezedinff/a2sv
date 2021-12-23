@@ -20,6 +20,7 @@ Input: s = "(ed(et(oc))el)"
 Output: "leetcode"
 Explanation: First, we reverse the substring "oc", then "etco", and finally, the whole string.
 """
+import unittest
 
 
 def reverseParentheses(s: str) -> str:
@@ -41,4 +42,9 @@ def reverseParentheses(s: str) -> str:
     return "".join(stack)
 
 
-print(reverseParentheses("(ed(et(oc))el)"))
+class TestSolution(unittest.TestCase):
+    def test_1(self):
+        s = "(ed(et(oc))el)"
+        expected = "leetcode"
+        actual = reverseParentheses(s)
+        self.assertEqual(expected, actual)
