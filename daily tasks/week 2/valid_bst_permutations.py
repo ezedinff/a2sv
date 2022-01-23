@@ -2,37 +2,35 @@
 # it can be an empty tree where the root is null
 # it can consist of a root node that contains a value and two subtrees, left subtree and right subtree
 
-# Given an integer, determine the number of valid binary search trees that can be created by nodes numbered 1 to n.
-
-# function description:
-# complete the function numBSTs that has the following parameters:
-# numBSTs has the following parameters:
-# int nodeValues[n]: an array of integers representing the values of the nodes
-# returns:
-# int[n]: an array of integers represent the number of different binary search trees that can be created for each test case.
-# since the number may be very large, return the number modulo 1000000007
-
-# constraints:
-# 1 <= n <= 1000
-# 1 <= nodeValues[i] <= 1000
-
-# test cases
+# Given an integer, determine the number of valid BSTs that can be created by nodes numbered from 1 to that integer. please see the samples below for diagrams based on 1, 2 or 3 nodes.
+# for example:
 # nodeValues = [5, 1, 2, 3, 4, 100]
-# output = [1, 2, 5, 14, 25666077]
+# where the first number is the size of the BST
+# the number of valid BSTs is: [1, 2, 5, 14, 25666077]
+
+# If there are n nodes then the number of possible binary trees is (1/n+1)*(2n^Cn)
+
+def numBST(n):
+    # DP to store the number of unique
+    # BST with key i 
+    dp = [0] * (n + 1) 
+    m = 1000000007
+    # Base case 
+    dp[0], dp[1] = 1, 1
+  
+    # fill the dp table in top-down 
+    # approach. 
+    for i in range(2, n + 1): 
+        for j in range(1, i + 1): 
+  
+            # n-i in right * i-1 in left 
+            dp[i] = dp[i] + (dp[i - j] *
+                             dp[j - 1]) 
+  
+    return dp[n] % m
 
 def numBSTs(nodeValues):
-    # Write your code here
-    # This is a "method-only" submission.
-    # You only need to complete this method.
-    mod = 1000000007
-    n = len(nodeValues)
-    dp = [[0] * n for i in range(n)]
-    for i in range(n):
-        dp[i][i] = 1
-    for i in range(n - 1):
-        for j in range(i + 1, n):
-            for k in range(i, j):
-                dp[i][j] += dp[i][k] * dp[k + 1][j]
-    return [dp[0][n - 1] % mod for i in range(n)]
+    nodes = nodeValues[1:]
+    return [numBST(n) for n in nodes]
 
 print(numBSTs([5, 1, 2, 3, 4, 100]))
