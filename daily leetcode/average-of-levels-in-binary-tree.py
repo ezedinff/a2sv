@@ -1,3 +1,6 @@
+from typing import List, Optional
+
+
 class TreeNode:
      def __init__(self, val=0, left=None, right=None):
          self.val = val
@@ -5,7 +8,7 @@ class TreeNode:
          self.right = right
 
 class Solution:
-    def averageOfLevels(self, root: Optional[TreeNode]) -> List[float]:\
+    def averageOfLevels(self, root: Optional[TreeNode]) -> List[float]:
         if not root:
             return []   
         queue = [root]
