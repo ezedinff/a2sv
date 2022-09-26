@@ -731,3 +731,77 @@ public class CompositePatternTest {
     }
 }
 ```
+
+#### Decorator
+Decorator is a structural design pattern that lets you attach new behaviors to objects by placing these objects inside special wrapper objects that contain the behaviors.
+
+use cases:
+- When you want to add responsibilities to individual objects, without affecting other objects from the same class.
+- When you want to add responsibilities to a whole class of objects, without creating new subclasses.
+
+Example:
+```java
+public interface Sandwich {
+    String make();
+}
+
+public class SimpleSandwich implements Sandwich {
+    @Override
+    public String make() {
+        return "Bread";
+    }
+}
+
+public class SandwichDecorator implements Sandwich {
+    protected Sandwich customSandwich;
+
+    public SandwichDecorator(Sandwich customSandwich) {
+        this.customSandwich = customSandwich;
+    }
+
+    @Override
+    public String make() {
+        return customSandwich.make();
+    }
+}
+
+public class DressingDecorator extends SandwichDecorator {
+    public DressingDecorator(Sandwich customSandwich) {
+        super(customSandwich);
+    }
+
+    @Override
+    public String make() {
+        return super.make() + " + Mayo";
+    }
+}
+
+public class MeatDecorator extends SandwichDecorator {
+    public MeatDecorator(Sandwich customSandwich) {
+        super(customSandwich);
+    }
+
+    @Override
+    public String make() {
+        return super.make() + " + Turkey";
+    }
+}
+
+public class CheeseDecorator extends SandwichDecorator {
+    public CheeseDecorator(Sandwich customSandwich) {
+        super(customSandwich);
+    }
+
+    @Override
+    public String make() {
+        return super.make() + " + Swiss";
+    }
+}
+
+public class DecoratorPatternTest {
+    public static void main(String[] args) {
+        Sandwich sandwich = new DressingDecorator(new MeatDecorator(new CheeseDecorator(new SimpleSandwich())));
+        System.out.println(sandwich.make());
+    }
+}
+```
