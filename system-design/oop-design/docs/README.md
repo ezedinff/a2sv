@@ -1091,3 +1091,87 @@ public class ChainPatternTest {
 }
 ```
 
+
+#### Command
+Command is a behavioral design pattern that turns a request into a stand-alone object that contains all information about the request. This transformation lets you parameterize methods with different requests, delay or queue a request’s execution, and support undoable operations.
+
+use cases:
+- When you want to parametrize objects by an action to perform.
+- When you want to queue operations, schedule their execution, or execute them remotely.
+- When you want to support undo.
+
+Example:
+```java
+public interface Order {
+    void execute();
+}
+
+public class Stock {
+    private String name = "ABC";
+    private int quantity = 10;
+
+    public void buy() {
+        System.out.println("Stock [ Name: " + name + ", Quantity: " + quantity + " ] bought");
+    }
+
+    public void sell() {
+        System.out.println("Stock [ Name: " + name + ", Quantity: " + quantity + " ] sold");
+    }
+}
+
+public class BuyStock implements Order {
+    private Stock abcStock;
+
+    public BuyStock(Stock abcStock) {
+        this.abcStock = abcStock;
+    }
+
+    @Override
+    public void execute() {
+        abcStock.buy();
+    }
+}
+
+public class SellStock implements Order {
+    private Stock abcStock;
+
+    public SellStock(Stock abcStock) {
+        this.abcStock = abcStock;
+    }
+
+    @Override
+    public void execute() {
+        abcStock.sell();
+    }
+}
+
+public class Broker {
+    private List<Order> orderList = new ArrayList<Order>();
+
+    public void takeOrder(Order order) {
+        orderList.add(order);
+    }
+
+    public void placeOrders() {
+        for (Order order : orderList) {
+            order.execute();
+        }
+        orderList.clear();
+    }
+}
+
+public class CommandPatternTest {
+    public static void main(String[] args) {
+        Stock abcStock = new Stock();
+
+        BuyStock buyStockOrder = new BuyStock(abcStock);
+        SellStock sellStockOrder = new SellStock(abcStock);
+
+        Broker broker = new Broker();
+        broker.takeOrder(buyStockOrder);
+        broker.takeOrder(sellStockOrder);
+
+        broker.placeOrders();
+    }
+}
+```
