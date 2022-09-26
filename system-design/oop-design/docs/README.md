@@ -714,7 +714,7 @@ public class CompositePatternTest {
         Employee dev1 = new Developer(100, "Messeret Kassaye", "Pro Developer");
         Employee dev2 = new Developer(101, "Ezedin Fedlu", "Developer");
         Employee manager1 = new Manager(200, "Luleseged Ayele", "SEO Manager");
-        Employee manager2 = new Manager(201, "Abenezer Chala", "Kushagra's Manager");
+        Employee manager2 = new Manager(201, "Abenezer Chala", "Project Manager");
 
         CompanyDirectory engDirectory = new CompanyDirectory();
         engDirectory.addEmployee(dev1);
