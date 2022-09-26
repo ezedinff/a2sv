@@ -932,3 +932,162 @@ public class FlyweightPatternTest {
     }
 }
 ```
+
+#### Proxy
+Proxy is a structural design pattern that lets you provide a substitute or placeholder for another object. A proxy controls access to the original object, allowing you to perform something either before or after the request gets through to the original object.
+
+use cases:
+- When you need a more versatile or sophisticated reference to an object than a simple pointer.
+- When you want to be able to create and destroy objects dynamically.
+- When you want to control access to the original object.
+
+Example:
+```java
+public interface Image {
+    void display();
+}
+
+public class RealImage implements Image {
+    private String fileName;
+
+    public RealImage(String fileName) {
+        this.fileName = fileName;
+        loadFromDisk(fileName);
+    }
+
+    @Override
+    public void display() {
+        System.out.println("Displaying " + fileName);
+    }
+
+    private void loadFromDisk(String fileName) {
+        System.out.println("Loading " + fileName);
+    }
+}
+
+public class ProxyImage implements Image {
+    private RealImage realImage;
+    private String fileName;
+
+    public ProxyImage(String fileName) {
+        this.fileName = fileName;
+    }
+
+    @Override
+    public void display() {
+        if (realImage == null) {
+            realImage = new RealImage(fileName);
+        }
+        realImage.display();
+    }
+}
+
+public class ProxyPatternTest {
+    public static void main(String[] args) {
+        Image image = new ProxyImage("test_10mb.jpg");
+
+        //image will be loaded from disk
+        image.display();
+        System.out.println("");
+
+        //image will not be loaded from disk
+        image.display();
+    }
+}
+```
+
+### Behavioral Patterns
+Behavioral patterns are concerned with algorithms and the assignment of responsibilities between objects.
+
+#### Chain of Responsibility
+Chain of Responsibility is a behavioral design pattern that lets you pass requests along a chain of handlers. Upon receiving a request, each handler decides either to process the request or to pass it to the next handler in the chain.
+
+use cases:
+- When more than one object may handle a request, and the handler isn’t known a priori. The handler should be ascertained automatically.
+- When you want to issue a request to one of several objects without specifying the receiver explicitly.
+- When the set of objects that can handle a request should be specified dynamically.
+
+Example:
+```java
+public abstract class AbstractLogger {
+    public static int INFO = 1;
+    public static int ERROR = 2;
+    public static int DEBUG = 3;
+
+    protected int level;
+
+    //next element in chain or responsibility
+    protected AbstractLogger nextLogger;
+
+    public void setNextLogger(AbstractLogger nextLogger) {
+        this.nextLogger = nextLogger;
+    }
+
+    public void logMessage(int level, String message) {
+        if (this.level <= level) {
+            write(message);
+        }
+        if (nextLogger != null) {
+            nextLogger.logMessage(level, message);
+        }
+    }
+
+    abstract protected void write(String message);
+}
+
+public class ConsoleLogger extends AbstractLogger {
+    public ConsoleLogger(int level) {
+        this.level = level;
+    }
+
+    @Override
+    protected void write(String message) {
+        System.out.println("Standard Console::Logger: " + message);
+    }
+}
+
+public class ErrorLogger extends AbstractLogger {
+    public ErrorLogger(int level) {
+        this.level = level;
+    }
+
+    @Override
+    protected void write(String message) {
+        System.out.println("Error Console::Logger: " + message);
+    }
+}
+
+public class FileLogger extends AbstractLogger {
+    public FileLogger(int level) {
+        this.level = level;
+    }
+
+    @Override
+    protected void write(String message) {
+        System.out.println("File::Logger: " + message);
+    }
+}
+public class ChainPatternTest {
+    private static AbstractLogger getChainOfLoggers() {
+        AbstractLogger errorLogger = new ErrorLogger(AbstractLogger.ERROR);
+        AbstractLogger fileLogger = new FileLogger(AbstractLogger.DEBUG);
+        AbstractLogger consoleLogger = new ConsoleLogger(AbstractLogger.INFO);
+
+        errorLogger.setNextLogger(fileLogger);
+        fileLogger.setNextLogger(consoleLogger);
+
+        return errorLogger;
+    }
+
+    public static void main(String[] args) {
+        AbstractLogger loggerChain = getChainOfLoggers();
+
+        loggerChain.logMessage(AbstractLogger.INFO, "This is an information.");
+
+        loggerChain.logMessage(AbstractLogger.DEBUG, "This is an debug level information.");
+
+        loggerChain.logMessage(AbstractLogger.ERROR, "This is an error information.");
+    }
+}
+```
+
