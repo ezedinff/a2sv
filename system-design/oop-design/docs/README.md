@@ -436,3 +436,34 @@ public class PrototypePatternTest {
     }
 }
 ```
+
+#### Singleton
+Singleton is a creational design pattern that lets you ensure that a class has only one instance, while providing a global access point to this instance.
+
+use cases:
+- When there must be exactly one instance of a class, and it must be accessible to clients from a well-known access point.
+- When you need stricter control over global variables.
+
+Example:
+```java
+public class Singleton {
+    private static Singleton instance;
+
+    private Singleton() {
+    }
+
+    public static Singleton getInstance() {
+        if (instance == null) {
+            instance = new Singleton();
+        }
+        return instance;
+    }
+}
+
+public class SingletonPatternTest {
+    public static void main(String[] args) {
+        Singleton singleton = Singleton.getInstance();
+        System.out.println(singleton);
+    }
+}
+```
