@@ -561,3 +561,173 @@ public class AdapterPatternTest {
     }
 }
 ```
+
+#### Bridge
+Bridge is a structural design pattern that lets you split a large class or a set of closely related classes into two separate hierarchies—abstraction and implementation—which can be developed independently of each other.
+
+use cases:
+- When you want to avoid a permanent binding between an abstraction and its implementation. This might be the case, for example, when the implementation must be selected or switched at run-time.
+- When both the abstractions and their implementations should be extensible by subclassing. In this case, the Bridge pattern lets you combine the different abstractions and implementations and extend them independently.
+
+Example:
+```java
+public interface Color {
+    void applyColor();
+}
+
+public class Red implements Color {
+    @Override
+    public void applyColor() {
+        System.out.println("red.");
+    }
+}
+
+public class Green implements Color {
+    @Override
+    public void applyColor() {
+        System.out.println("green.");
+    }
+}
+
+public class Blue implements Color {
+    @Override
+    public void applyColor() {
+        System.out.println("blue.");
+    }
+}
+
+public abstract class Shape {
+    protected Color color;
+
+    protected Shape(Color color) {
+        this.color = color;
+    }
+
+    abstract public void applyColor();
+}
+
+public class Circle extends Shape {
+    public Circle(Color color) {
+        super(color);
+    }
+
+    @Override
+    public void applyColor() {
+        System.out.print("Circle filled with color ");
+        color.applyColor();
+    }
+}
+
+public class Square extends Shape {
+    public Square(Color color) {
+        super(color);
+    }
+
+    @Override
+    public void applyColor() {
+        System.out.print("Square filled with color ");
+        color.applyColor();
+    }
+}
+
+public class BridgePatternTest {
+    public static void main(String[] args) {
+        Shape greenCircle = new Circle(new Green());
+        Shape redCircle = new Circle(new Red());
+        Shape blueSquare = new Square(new Blue());
+
+        greenCircle.applyColor();
+        redCircle.applyColor();
+        blueSquare.applyColor();
+    }
+}
+```
+
+#### Composite
+Composite is a structural design pattern that lets you compose objects into tree structures and then work with these structures as if they were individual objects.
+
+use cases:
+- When you have to implement a tree-like object structure.
+- When you want the client code to treat both single (scalar) and composite objects uniformly.
+
+Example:
+```java
+public interface Employee {
+    void showEmployeeDetails();
+}
+
+public class Developer implements Employee {
+    private String name;
+    private long empId;
+    private String position;
+
+    public Developer(long empId, String name, String position) {
+        this.empId = empId;
+        this.name = name;
+        this.position = position;
+    }
+
+    @Override
+    public void showEmployeeDetails() {
+        System.out.println(empId + " " + name + " " + position);
+    }
+}
+
+public class Manager implements Employee {
+    private String name;
+    private long empId;
+    private String position;
+
+    public Manager(long empId, String name, String position) {
+        this.empId = empId;
+        this.name = name;
+        this.position = position;
+    }
+
+    @Override
+    public void showEmployeeDetails() {
+        System.out.println(empId + " " + name + " " + position);
+    }
+}
+
+public class CompanyDirectory implements Employee {
+    private List<Employee> employeeList = new ArrayList<>();
+
+    @Override
+    public void showEmployeeDetails() {
+        for (Employee emp : employeeList) {
+            emp.showEmployeeDetails();
+        }
+    }
+
+    public void addEmployee(Employee emp) {
+        employeeList.add(emp);
+    }
+
+    public void removeEmployee(Employee emp) {
+        employeeList.remove(emp);
+    }
+}
+
+public class CompositePatternTest {
+    public static void main(String[] args) {
+        Employee dev1 = new Developer(100, "Messeret Kassaye", "Pro Developer");
+        Employee dev2 = new Developer(101, "Ezedin Fedlu", "Developer");
+        Employee manager1 = new Manager(200, "Luleseged Ayele", "SEO Manager");
+        Employee manager2 = new Manager(201, "Abenezer Chala", "Kushagra's Manager");
+
+        CompanyDirectory engDirectory = new CompanyDirectory();
+        engDirectory.addEmployee(dev1);
+        engDirectory.addEmployee(dev2);
+        engDirectory.addEmployee(manager1);
+
+        CompanyDirectory accDirectory = new CompanyDirectory();
+        accDirectory.addEmployee(manager2);
+
+        CompanyDirectory directory = new CompanyDirectory();
+        directory.addEmployee(engDirectory);
+        directory.addEmployee(accDirectory);
+        directory.showEmployeeDetails();
+    }
+}
+```
