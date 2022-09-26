@@ -1175,3 +1175,89 @@ public class CommandPatternTest {
     }
 }
 ```
+
+#### Interpreter
+Interpreter is a behavioral design pattern that lets you define a grammar for a language, and then create an interpreter that uses this grammar to interpret sentences in the language.
+
+use cases:
+- When there is a language that needs to be interpreted frequently.
+- When there is a simple grammar for statements in the language that can be easily represented in the code.
+
+Example:
+```java
+public interface Expression {
+    boolean interpret(String context);
+}
+
+public class TerminalExpression implements Expression {
+    private String data;
+
+    public TerminalExpression(String data) {
+        this.data = data;
+    }
+
+    @Override
+    public boolean interpret(String context) {
+        if (context.contains(data)) {
+            return true;
+        }
+        return false;
+    }
+}
+
+public class OrExpression implements Expression {
+    private Expression expr1 = null;
+    private Expression expr2 = null;
+
+    public OrExpression(Expression expr1, Expression expr2) {
+        this.expr1 = expr1;
+        this.expr2 = expr2;
+    }
+
+    @Override
+    public boolean interpret(String context) {
+        return expr1.interpret(context) || expr2.interpret(context);
+    }
+}
+
+public class AndExpression implements Expression {
+    private Expression expr1 = null;
+    private Expression expr2 = null;
+
+    public AndExpression(Expression expr1, Expression expr2) {
+        this.expr1 = expr1;
+        this.expr2 = expr2;
+    }
+
+    @Override
+    public boolean interpret(String context) {
+        return expr1.interpret(context) && expr2.interpret(context);
+    }
+}
+
+public class InterpreterPatternTest {
+    //Rule: Robert
+    public static Expression getMaleExpression() {
+        Expression robert = new TerminalExpression("Robert");
+        Expression john = new TerminalExpression("John");
+        return new OrExpression(robert, john);
+    }
+
+    //Rule: Julie
+    public static Expression getMarriedWomanExpression() {
+        Expression julie = new TerminalExpression("Julie");
+        Expression married = new TerminalExpression("Married");
+        return new AndExpression(julie, married);
+    }
+
+    public static void main(String[] args) {
+        Expression isMale = getMaleExpression();
+        Expression isMarriedWoman = getMarriedWomanExpression();
+        // Robert
+        System.out.println("John is male? " + isMale.interpret("John"));
+
+        // Julie
+        System.out.println("Janne is married woman? " + isMarriedWoman.interpret("Janne");
+    }
+}
+```
