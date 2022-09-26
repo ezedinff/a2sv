@@ -372,3 +372,67 @@ public class BuilderPatternDemo {
     }
 }
 ```
+
+#### Prototype
+Prototype is a creational design pattern that lets you copy existing objects without making your code dependent on their classes.
+
+use cases:
+- When your code shouldn't depend on the concrete classes of objects that you need to copy.
+- When you want to reduce the number of subclasses that only differ in the way they initialize their respective objects. Instead of creating a bunch of subclasses with the same code, you can put the varying initialization code into a single class and use it as a prototype.
+
+Example:
+```java
+public interface PrototypeCapable extends Cloneable {
+    PrototypeCapable clone() throws CloneNotSupportedException;
+}
+
+public class Movie implements PrototypeCapable {
+    private String name;
+    private double price;
+
+    public Movie() {
+        super();
+    }
+
+    public Movie(Movie movie) {
+        super();
+        this.name = movie.name;
+        this.price = movie.price;
+    }
+
+    @Override
+    public Movie clone() throws CloneNotSupportedException {
+        return (Movie) super.clone();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+}
+
+public class PrototypePatternTest {
+    public static void main(String[] args) throws CloneNotSupportedException {
+        Movie movie = new Movie();
+        movie.setName("Avengers");
+        movie.setPrice(100.00);
+        System.out.println(movie);
+
+        Movie movie1 = movie.clone();
+        movie1.setName("Avengers: Age of Ultron");
+        movie1.setPrice(200.00);
+        System.out.println(movie1);
+    }
+}
+```
