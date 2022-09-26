@@ -214,3 +214,161 @@ public class AbstractFactoryPatternDemo {
     }
 }
 ```
+
+#### Builder
+Builder is a creational design pattern that lets you construct complex objects step by step. The pattern allows you to produce different types and representations of an object using the same construction code.
+
+use cases:
+- When the algorithm for creating a complex object should be independent of the parts that make up the object and how they're assembled.
+- When the construction process must allow different representations for the object that's constructed.
+
+Example:
+```java
+public class Meal {
+    private List<Item> items = new ArrayList<>();
+
+    public void addItem(Item item) {
+        items.add(item);
+    }
+
+    public float getCost() {
+        float cost = 0.0f;
+        for (Item item : items) {
+            cost += item.price();
+        }
+        return cost;
+    }
+
+    public void showItems() {
+        for (Item item : items) {
+            System.out.print("Item : " + item.name());
+            System.out.print(", Packing : " + item.packing().pack());
+            System.out.println(", Price : " + item.price());
+        }
+    }
+}
+
+public interface Item {
+    String name();
+    Packing packing();
+    float price();
+}
+
+public interface Packing {
+    String pack();
+}
+
+public class Wrapper implements Packing {
+    @Override
+    public String pack() {
+        return "Wrapper";
+    }
+}
+
+public class Bottle implements Packing {
+    @Override
+    public String pack() {
+        return "Bottle";
+    }
+}
+
+public abstract class Burger implements Item {
+    @Override
+    public Packing packing() {
+        return new Wrapper();
+    }
+
+    @Override
+    public abstract float price();
+}
+
+public abstract class ColdDrink implements Item {
+    @Override
+    public Packing packing() {
+        return new Bottle();
+    }
+
+    @Override
+    public abstract float price();
+}
+
+public class VegBurger extends Burger {
+    @Override
+    public String name() {
+        return "Veg Burger";
+    }
+
+    @Override
+    public float price() {
+        return 25.0f;
+    }
+}
+
+public class ChickenBurger extends Burger {
+    @Override
+    public String name() {
+        return "Chicken Burger";
+    }
+
+    @Override
+    public float price() {
+        return 50.5f;
+    }
+}
+
+public class Coke extends ColdDrink {
+    @Override
+    public String name() {
+        return "Coke";
+    }
+
+    @Override
+    public float price() {
+        return 30.0f;
+    }
+}
+
+public class Pepsi extends ColdDrink {
+    @Override
+    public String name() {
+        return "Pepsi";
+    }
+
+    @Override
+    public float price() {
+        return 35.0f;
+    }
+}
+
+public class MealBuilder {
+    public Meal prepareVegMeal() {
+        Meal meal = new Meal();
+        meal.addItem(new VegBurger());
+        meal.addItem(new Coke());
+        return meal;
+    }
+
+    public Meal prepareNonVegMeal() {
+        Meal meal = new Meal();
+        meal.addItem(new ChickenBurger());
+        meal.addItem(new Pepsi());
+        return meal;
+    }
+}
+
+public class BuilderPatternDemo {
+    public static void main(String[] args) {
+        MealBuilder mealBuilder = new MealBuilder();
+
+        Meal vegMeal = mealBuilder.prepareVegMeal();
+        System.out.println("Veg Meal");
+        vegMeal.showItems();
+        System.out.println("Total Cost: " + vegMeal.getCost());
+
+        Meal nonVegMeal = mealBuilder.prepareNonVegMeal();
+        System.out.println("\n\nNon-Veg Meal");
+        nonVegMeal.showItems();
+        System.out.println("Total Cost: " + nonVegMeal.getCost());
+    }
+}
+```
