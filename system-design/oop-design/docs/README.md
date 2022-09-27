@@ -1738,3 +1738,79 @@ public class StrategyPatternTest {
     }
 }
 ```
+
+#### Template
+Template is a behavioral design pattern that defines the skeleton of an algorithm in the superclass but lets subclasses override specific steps of the algorithm without changing its structure.
+
+use cases:
+- When you want to let clients extend only particular steps of an algorithm, but not the whole algorithm or its structure.
+- When you have several classes that contain almost the same code with only minor differences.
+
+Example:
+```java
+public abstract class Game {
+    abstract void initialize();
+    abstract void startPlay();
+    abstract void endPlay();
+
+    //template method
+    public final void play(){
+
+        //initialize the game
+        initialize();
+
+        //start game
+        startPlay();
+
+        //end game
+        endPlay();
+    }
+}
+
+public class Cricket extends Game {
+
+    @Override
+    void endPlay() {
+        System.out.println("Cricket Game Finished!");
+    }
+
+    @Override
+    void initialize() {
+        System.out.println("Cricket Game Initialized! Start playing.");
+    }
+
+    @Override
+    void startPlay() {
+        System.out.println("Cricket Game Started. Enjoy the game!");
+    }
+}
+
+public class Football extends Game {
+
+    @Override
+    void endPlay() {
+        System.out.println("Football Game Finished!");
+    }
+
+    @Override
+    void initialize() {
+        System.out.println("Football Game Initialized! Start playing.");
+    }
+
+    @Override
+    void startPlay() {
+        System.out.println("Football Game Started. Enjoy the game!");
+    }
+}
+
+public class TemplatePatternTest {
+    public static void main(String[] args) {
+
+        Game game = new Cricket();
+        game.play();
+        System.out.println();
+        game = new Football();
+        game.play();
+    }
+}
+```
