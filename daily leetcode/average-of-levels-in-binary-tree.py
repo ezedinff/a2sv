@@ -24,3 +24,8 @@ class Solution:
             queue = new_queue
         return res
 
+
+
+if __name__ == "__main__":
+    print("Hello")
+
