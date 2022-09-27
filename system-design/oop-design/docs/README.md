@@ -1253,11 +1253,488 @@ public class InterpreterPatternTest {
     public static void main(String[] args) {
         Expression isMale = getMaleExpression();
         Expression isMarriedWoman = getMarriedWomanExpression();
-        // Robert
-        System.out.println("John is male? " + isMale.interpret("John"));
+    }
+}
+```
 
-        // Julie
-        System.out.println("Janne is married woman? " + isMarriedWoman.interpret("Janne");
+
+#### Iterator
+Iterator is a behavioral design pattern that lets you traverse elements of a collection without exposing its underlying representation (list, stack, tree, etc.).
+
+use cases:
+- When your collection has a complex data structure under the hood, but you want to hide its complexity from the clients.
+- When you want to provide multiple traversal algorithms for a collection.
+
+Example:
+```java
+public interface Iterator {
+    boolean hasNext();
+    Object next();
+}
+
+public interface Container {
+    Iterator getIterator();
+}
+
+public class NameRepository implements Container {
+    public String names[] = {"Robert" , "John" ,"Julie" , "Lora"};
+
+    @Override
+    public Iterator getIterator() {
+        return new NameIterator();
+    }
+
+    private class NameIterator implements Iterator {
+        int index;
+
+        @Override
+        public boolean hasNext() {
+            if(index < names.length){
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public Object next() {
+            if(this.hasNext()){
+                return names[index++];
+            }
+            return null;
+        }
+    }
+}
+
+public class IteratorPatternTest {
+    public static void main(String[] args) {
+        NameRepository namesRepository = new NameRepository();
+
+        for(Iterator iter = namesRepository.getIterator(); iter.hasNext();){
+            String name = (String)iter.next();
+            System.out.println("Name : " + name);
+        }
+    }
+}
+```
+
+#### Mediator
+Mediator is a behavioral design pattern that lets you reduce chaotic dependencies between objects. The pattern restricts direct communications between the objects and forces them to collaborate only via a mediator object.
+
+use cases:
+- When you want to reduce coupling between components of a program.
+- When you want to control how and when objects interact.
+
+Example:
+```java
+public interface ChatMediator {
+    void sendMessage(String msg, User user);
+    void addUser(User user);
+}
+
+public abstract class User {
+    protected ChatMediator mediator;
+    protected String name;
+
+    public User(ChatMediator med, String name){
+        this.mediator=med;
+        this.name=name;
+    }
+
+    public abstract void send(String msg);
+    public abstract void receive(String msg);
+}
+
+public class UserImpl extends User {
+
+    public UserImpl(ChatMediator med, String name) {
+        super(med, name);
+    }
+
+    @Override
+    public void send(String msg) {
+        System.out.println(this.name+": Sending Message="+msg);
+        mediator.sendMessage(msg, this);
+    }
+
+    @Override
+    public void receive(String msg) {
+        System.out.println(this.name+": Received Message:"+msg);
+    }
+}
+
+public class ChatMediatorImpl implements ChatMediator {
+    private List<User> users;
+
+    public ChatMediatorImpl(){
+        this.users=new ArrayList<>();
+    }
+
+    @Override
+    public void sendMessage(String msg, User user) {
+        for(User u : this.users){
+            //message should not be received by the user sending it
+            if(u != user){
+                u.receive(msg);
+            }
+        }
+    }
+
+    @Override
+    public void addUser(User user) {
+        this.users.add(user);
+    }
+}
+
+public class MediatorPatternTest {
+    public static void main(String[] args) {
+        ChatMediator mediator = new ChatMediatorImpl();
+        User user1 = new UserImpl(mediator, "Ezedin");
+        User user2 = new UserImpl(mediator, "John");
+        User user3 = new UserImpl(mediator, "George");
+        User user4 = new UserImpl(mediator, "Messeret");
+        mediator.addUser(user1);
+        mediator.addUser(user2);
+        mediator.addUser(user3);
+        mediator.addUser(user4);
+
+        user1.send("Hi All");
+    }
+}
+```
+
+#### Memento
+Memento is a behavioral design pattern that lets you save and restore the previous state of an object without revealing the details of its implementation.
+
+use cases:
+- When you want to provide the ability to restore the state of an object without revealing its details.
+- When you want to save a snapshot of an object’s state to be able to restore it later.
+
+Example:
+```java
+public class Memento {
+    private String state;
+
+    public Memento(String state){
+        this.state=state;
+    }
+
+    public String getState() {
+        return state;
+    }
+}
+
+public class Originator {
+    private String state;
+
+    public void setState(String state){
+        this.state=state;
+    }
+
+    public String getState(){
+        return state;
+    }
+
+    public Memento saveStateToMemento(){
+        return new Memento(state);
+    }
+
+    public void getStateFromMemento(Memento Memento){
+        state = Memento.getState();
+    }
+}
+
+public class CareTaker {
+    private List<Memento> mementoList = new ArrayList<Memento>();
+
+    public void add(Memento state){
+        mementoList.add(state);
+    }
+
+    public Memento get(int index){
+        return mementoList.get(index);
+    }
+}
+
+public class MementoPatternTest {
+    public static void main(String[] args) {
+        Originator originator = new Originator();
+        CareTaker careTaker = new CareTaker();
+        originator.setState("State #1");
+        originator.setState("State #2");
+        careTaker.add(originator.saveStateToMemento());
+        originator.setState("State #3");
+        careTaker.add(originator.saveStateToMemento());
+        originator.setState("State #4");
+        System.out.println("Current State: " + originator.getState());
+        originator.getStateFromMemento(careTaker.get(0));
+        System.out.println("First saved State: " + originator.getState());
+        originator.getStateFromMemento(careTaker.get(1));
+        System.out.println("Second saved State: " + originator.getState());
+    }
+}
+```
+
+#### Observer
+Observer is a behavioral design pattern that lets you define a subscription mechanism to notify multiple objects about any events that happen to the object they’re observing.
+
+use cases:
+- When you want to have a one-to-many dependency between objects so that when one object changes state, all its dependents are notified and updated automatically.
+
+Example:
+```java
+public interface Subject {
+    void register(Observer obj);
+    void unregister(Observer obj);
+    void notifyObservers();
+    Object getUpdate(Observer obj);
+}
+
+public interface Observer {
+    void update();
+    void setSubject(Subject sub);
+}
+
+public class MyTopic implements Subject {
+
+    private List<Observer> observers;
+    private String message;
+    private boolean changed;
+    private final Object MUTEX= new Object();
+
+    public MyTopic(){
+        this.observers=new ArrayList<>();
+    }
+
+    @Override
+    public void register(Observer obj) {
+        if(obj == null) throw new NullPointerException("Null Observer");
+        synchronized (MUTEX) {
+            if(!observers.contains(obj)) observers.add(obj);
+        }
+    }
+
+    @Override
+    public void unregister(Observer obj) {
+        synchronized (MUTEX) {
+            observers.remove(obj);
+        }
+    }
+
+    @Override
+    public void notifyObservers() {
+        List<Observer> observersLocal = null;
+        //synchronization is used to make sure any observer registered after message is received is not notified
+        synchronized (MUTEX) {
+            if (!changed)
+                return;
+            observersLocal = new ArrayList<>(this.observers);
+            this.changed=false;
+        }
+        for (Observer obj : observersLocal) {
+            obj.update();
+        }
+
+    }
+
+    @Override
+    public Object getUpdate(Observer obj) {
+        return this.message;
+    }
+
+    //method to post message to the topic
+    public void postMessage(String msg){
+        System.out.println("Message Posted to Topic:"+msg);
+        this.message=msg;
+        this.changed=true;
+        notifyObservers();
+    }
+
+}
+
+public class MyTopicSubscriber implements Observer {
+
+    private String name;
+    private Subject topic;
+
+    public MyTopicSubscriber(String nm){
+        this.name=nm;
+    }
+
+    @Override
+    public void update() {
+        String msg = (String) topic.getUpdate(this);
+        if(msg == null){
+            System.out.println(name+":: No new message");
+        }else
+            System.out.println(name+":: Consuming message::"+msg);
+    }
+
+    @Override
+    public void setSubject(Subject sub) {
+        this.topic=sub;
+    }
+
+}
+
+public class ObserverPatternTest {
+    public static void main(String[] args) {
+        //create subject
+        MyTopic topic = new MyTopic();
+
+        //create observers
+        Observer obj1 = new MyTopicSubscriber("Obj1");
+        Observer obj2 = new MyTopicSubscriber("Obj2");
+        Observer obj3 = new MyTopicSubscriber("Obj3");
+
+        //register observers to the subject
+        topic.register(obj1);
+        topic.register(obj2);
+        topic.register(obj3);
+
+        //attach observer to subject
+        obj1.setSubject(topic);
+        obj2.setSubject(topic);
+        obj3.setSubject(topic);
+
+        //check if any update is available
+        obj1.update();
+
+        //now send message to subject
+        topic.postMessage("New Message");
+    }
+}
+```
+
+#### State
+State is a behavioral design pattern that lets an object alter its behavior when its internal state changes. It appears as if the object changed its class.
+
+use cases:
+- When an object’s behavior depends on its state, and it must change its behavior at runtime depending on that state.
+- When operations have large, multipart conditional statements that depend on the object’s state. This state is usually represented by one or more enumerated constants. Often, several operations will contain this same conditional structure. The State pattern puts each branch of the conditional in a separate class. This lets you treat the object’s state as an object in its own right that can vary independently from other objects.
+
+Example:
+```java
+public interface State {
+    void doAction(Context context);
+}
+
+public class StartState implements State {
+
+    @Override
+    public void doAction(Context context) {
+        System.out.println("Player is in start state");
+        context.setState(this);
+    }
+
+    public String toString(){
+        return "Start State";
+    }
+}
+
+public class StopState implements State {
+
+    @Override
+    public void doAction(Context context) {
+        System.out.println("Player is in stop state");
+        context.setState(this);
+    }
+
+    public String toString(){
+        return "Stop State";
+    }
+}
+
+public class Context {
+    private State state;
+
+    public Context(){
+        state = null;
+    }
+
+    public void setState(State state){
+        this.state = state;
+    }
+
+    public State getState(){
+        return state;
+    }
+}
+
+public class StatePatternTest {
+    public static void main(String[] args) {
+        Context context = new Context();
+
+        StartState startState = new StartState();
+        startState.doAction(context);
+
+        System.out.println(context.getState().toString());
+
+        StopState stopState = new StopState();
+        stopState.doAction(context);
+
+        System.out.println(context.getState().toString());
+    }
+}
+```
+
+
+#### Strategy
+Strategy is a behavioral design pattern that lets you define a family of algorithms, put each of them into a separate class, and make their objects interchangeable.
+
+use cases:
+- When you want to use different variants of an algorithm within an object and be able to switch from one algorithm to another during runtime.
+- When you have a lot of similar classes that only differ in the way they execute some behavior.
+- When you want to isolate the implementation details of an algorithm from the code that uses it.
+
+Example:
+```java
+public interface Strategy {
+    int doOperation(int num1, int num2);
+}
+
+public class OperationAdd implements Strategy{
+    @Override
+    public int doOperation(int num1, int num2) {
+        return num1 + num2;
+    }
+}
+
+public class OperationSubstract implements Strategy{
+    @Override
+    public int doOperation(int num1, int num2) {
+        return num1 - num2;
+    }
+}
+
+public class OperationMultiply implements Strategy{
+    @Override
+    public int doOperation(int num1, int num2) {
+        return num1 * num2;
+    }
+}
+
+public class Context {
+    private Strategy strategy;
+
+    public Context(Strategy strategy){
+        this.strategy = strategy;
+    }
+
+    public int executeStrategy(int num1, int num2){
+        return strategy.doOperation(num1, num2);
+    }
+}
+
+public class StrategyPatternTest {
+    public static void main(String[] args) {
+        Context context = new Context(new OperationAdd());
+        System.out.println("10 + 5 = " + context.executeStrategy(10, 5));
+
+        context = new Context(new OperationSubstract());
+        System.out.println("10 - 5 = " + context.executeStrategy(10, 5));
+
+        context = new Context(new OperationMultiply());
+        System.out.println("10 * 5 = " + context.executeStrategy(10, 5));
     }
 }
 ```
