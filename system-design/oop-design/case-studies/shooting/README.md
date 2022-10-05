@@ -1,85 +1,150 @@
-# Shooting Game Design
+# Game Station
 
-## Requirements
+## Problem
+design a game station, which can play different games.
+games are added dynamically like a plugin. (like vs code extension)
 
-## Analysis
-- Bullet
-- Tank
-- Map
-- Game
+## Solution
+## Simple Game using Canvas
+```typescript
 
-## Design
-### Class Diagram
-```plantuml
-@startuml
-class Bullet {
-    - int x
-    - int y
-    - int speed
-    - int direction
-    - int damage
-    - int range
-    - int distance
-    - int width
-    - int height
-    - boolean isAlive
-    - boolean isEnemy
-    + Bullet(int x, int y, int speed, int direction, int damage, int range, int width, int height, boolean isEnemy)
-    + void move()
-    + void draw()
-    + void checkCollision()
-    + void checkRange()
+// Game.ts
+interface Game {
+    name: string;
+    init(rootID: string): void;
+    play(): void;
+    stop(): void;
 }
 
+// GameStation.ts
+class GameStation {
+    private gamesMap: Map<string, Game> = new Map();
+    private currentGame: Game | null = null;
+    private static readonly rootID = 'game-root'; // component id on dom
+    addGame(game: Game) {
+        this.gamesMap.set(game.name, game);
+    }
+    play(gameName: string) {
+        if (this.currentGame) {
+            this.currentGame.stop();
+        }
+        const game = this.gamesMap.get(gameName);
+        if (game) {
+            this.currentGame = game;
+            game.init(this.rootID);
+            game.play();
+        }
+    }
+}
+
+// ShootingGamePlugin.ts
+class ShootingGamePlugin {
+    constructor(private gameStation: GameStation) {}
+    register(game: Game) {
+        this.gameStation.addGame(game);
+    }
+}
+
+// ShootingGame.ts
+class ShootingGame implements Game {
+    name = 'shooting';
+    private canvas: HTMLCanvasElement;
+    private playerTank: Tank;
+    init(rootID: string) {
+        this.canvas = document.createElement('canvas');
+        this.canvas.width = 500;
+        this.canvas.height = 500;
+        document.getElementById(rootID).appendChild(this.canvas);
+
+        const ctx = this.canvas.getContext('2d');
+        if (ctx) {
+            this.playerTank = new Tank(0, 0, 100, 100);
+            this.playerTank.draw(ctx);
+        }
+
+        
+    }
+    play() {
+        // start game
+
+
+    }
+    stop() {
+        // stop game
+    }
+}
+
+// Tank.ts
 class Tank {
-    - int x
-    - int y
-    - int speed
-    - int direction
-    - int health
-    - int width
-    - int height
-    - boolean isAlive
-    - boolean isEnemy
-    + Tank(int x, int y, int speed, int direction, int health, int width, int height, boolean isEnemy)
-    + void move()
-    + void draw()
-    + void checkCollision()
-    + void checkHealth()
+    private x: number;
+    private y: number;
+    private width: number;
+    private height: number;
+    private color: string;
+    private speed: number;
+    private ctx: CanvasRenderingContext2D;
+    constructor(x: number, y: number, width: number, height: number, color: string, speed: number, ctx: CanvasRenderingContext2D) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.color = color;
+        this.speed = speed;
+        this.ctx = ctx;
+    }
+    draw(ctx: CanvasRenderingContext2D) {
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+    move(x: number, y: number) {
+        this.x = x;
+        this.y = y;
+    }
+
+    fire() {
+        const bullet = new Bullet(this.x, this.y, 10, 10, 'red', 10);
+        bullet.fire(this.ctx);
+    }
 }
 
-class Map {
-    - int width
-    - int height
-    - int[][] map
-    + Map(int width, int height)
-    + void draw()
+// bullet.ts
+class Bullet {
+    private x: number;
+    private y: number;
+    private width: number;
+    private height: number;
+    private color: string;
+    private speed: number;
+    constructor(x: number, y: number, width: number, height: number, color: string, speed: number) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.color = color;
+        this.speed = speed;
+    }
+    draw(ctx: CanvasRenderingContext2D) {
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+    move() {
+        this.x = this.x + this.speed;
+    }
+    fire(ctx: CanvasRenderingContext2D) {
+        // clear rect from canvas
+        ctx.clearRect(this.x, this.y, this.width, this.height);
+        this.draw(ctx);
+        this.move();
+    }
 }
 
-class Game {
-    - int width
-    - int height
-    - int[][] map
-    - Tank tank
-    - Tank enemyTank
-    - List<Bullet> bullets
-    - List<Bullet> enemyBullets
-    + Game(int width, int height)
-    + void draw()
-    + void update()
-    + void checkCollision()
-    + void checkHealth()
-    + void checkRange()
-    + void checkWin()
-}
+// EnemyTank.ts
 
-Bullet "1" -- "1" Tank
-Bullet "1" -- "1" Map
-Tank "1" -- "1" Map
-Game "1" -- "1" Map
-Game "1" -- "1" Tank
-Game "1" -- "*" Bullet
-@enduml
+
+// main.ts
+const gameStation = new GameStation();
+const shootingGamePlugin = new ShootingGamePlugin(gameStation);
+shootingGamePlugin.register(new ShootingGame());
+gameStation.play('shooting');
+
 ```
-
-

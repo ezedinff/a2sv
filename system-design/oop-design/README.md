@@ -1,4 +1,9 @@
 # Object Oriented Design
+
+Object Oriented Design is a way of designing software applications by using objects. Objects are the basic building blocks of Object Oriented Programming. Objects are created using classes. A class is a blueprint for creating objects. Objects have properties and methods. Properties are the characteristics of an object. Methods are the actions that an object can perform.
+
+I choose Java as the programming language for this course. Java is an object oriented programming language. Java is a general purpose programming language. It is used to develop desktop and mobile applications, web applications, enterprise applications and so on. Java is a popular programming language. It is used by many companies and organizations. It is a high level programming language. It is easy to learn and use. Java is a statically typed programming language. It is a compiled programming language. It is a multi paradigm programming language. It supports object oriented programming, functional programming and imperative programming.
+
 ## Table of Contents
 - [Object Oriented Design and UML](#object-oriented-design-and-uml)
     - [Object Oriented Basics](#object-oriented-basics)
@@ -47,6 +52,8 @@
     - [KISS](#kiss)
     - [YAGNI](#yagni)
     - [Law of Demeter](#law-of-demeter)
+- [Object Oriented Design Case Studies](#object-oriented-analysis-and-design-case-studies)
+    - [Designing Chess](./case-studies/chess)
 
 ## Object Oriented Design and UML
 ### Object Oriented Basics
@@ -1814,3 +1821,135 @@ public class TemplatePatternTest {
     }
 }
 ```
+
+#### Visitor
+Visitor is a behavioral design pattern that lets you separate algorithms from the objects on which they operate.
+
+use cases:
+- When you have a relatively complex set of structured data classes that you want to be able to traverse in various ways without changing their classes.
+- When you want to be able to define new operations over existing object structures without changing those structures.
+- When you want to be able to define related operations as classes instead of having to implement all variations of the operations within one class.
+
+Example:
+```java
+public interface ComputerPart {
+    public void accept(ComputerPartVisitor computerPartVisitor);
+}
+
+public class Computer implements ComputerPart {
+
+    ComputerPart[] parts;
+
+    public Computer(){
+        parts = new ComputerPart[] {new Mouse(), new Keyboard(), new Monitor()};
+    }
+
+    @Override
+    public void accept(ComputerPartVisitor computerPartVisitor) {
+        for (int i = 0; i < parts.length; i++) {
+            parts[i].accept(computerPartVisitor);
+        }
+        computerPartVisitor.visit(this);
+    }
+}
+
+public class Keyboard implements ComputerPart {
+
+    @Override
+    public void accept(ComputerPartVisitor computerPartVisitor) {
+        computerPartVisitor.visit(this);
+    }
+}
+
+public class Monitor implements ComputerPart {
+
+    @Override
+    public void accept(ComputerPartVisitor computerPartVisitor) {
+        computerPartVisitor.visit(this);
+    }
+}
+
+public class Mouse implements ComputerPart {
+
+    @Override
+    public void accept(ComputerPartVisitor computerPartVisitor) {
+        computerPartVisitor.visit(this);
+    }
+}
+
+public interface ComputerPartVisitor {
+    public void visit(Computer computer);
+    public void visit(Mouse mouse);
+    public void visit(Keyboard keyboard);
+    public void visit(Monitor monitor);
+}
+
+public class ComputerPartDisplayVisitor implements ComputerPartVisitor {
+
+    @Override
+    public void visit(Computer computer) {
+        System.out.println("Displaying Computer.");
+    }
+
+    @Override
+    public void visit(Mouse mouse) {
+        System.out.println("Displaying Mouse.");
+    }
+
+    @Override
+    public void visit(Keyboard keyboard) {
+        System.out.println("Displaying Keyboard.");
+    }
+
+    @Override
+    public void visit(Monitor monitor) {
+        System.out.println("Displaying Monitor.");
+    }
+}
+
+public class VisitorPatternTest {
+    public static void main(String[] args) {
+
+        ComputerPart computer = new Computer();
+        computer.accept(new ComputerPartDisplayVisitor());
+    }
+}
+```
+
+## Design Principles
+
+### SOLID
+
+#### Single Responsibility Principle
+A class should have only one reason to change.
+
+#### Open-Closed Principle
+Software entities (classes, modules, functions, etc.) should be open for extension, but closed for modification.
+
+#### Liskov Substitution Principle
+Objects in a program should be replaceable with instances of their subtypes without altering the correctness of that program.
+
+#### Interface Segregation Principle
+Many client-specific interfaces are better than one general-purpose interface.
+
+#### Dependency Inversion Principle
+Depend upon abstractions. Do not depend upon concrete classes.
+
+### DRY
+Don't Repeat Yourself - Every piece of knowledge must have a single, unambiguous, authoritative representation within a system.
+
+### KISS
+Keep It Simple, Stupid (or Keep It Short and Simple)
+
+### YAGNI
+You Ain't Gonna Need It (Don't implement something until you need it)
+
+### Law of Demeter
+A method should only call methods of:
+- itself
+- objects passed in as parameters
+- any object the method creates or instantiates
+- any components of the object
+
+### Composition over Inheritance
+Prefer composition over inheritance. Composition is the act of creating a new class by combining other classes. Inheritance is the act of creating a new class from an existing class. Inheritance is a form of specialization. Composition is a form of aggregation. Composition is a "has-a" relationship. Inheritance is an "is-a" relationship. Composition is more flexible than inheritance.
