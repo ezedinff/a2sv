@@ -1,0 +1,300 @@
+'''
+1.Arithmetic Operators
+
+yohans hailu
+if __name__ == '__main__':
+    a = int(input())
+    b = int(input())
+    print(a+b)
+    print(a-b)
+    print(a*b)
+    
+ermias mulugeta
+if __name__ == '__main__':
+    a = int(input())
+    b = int(input())
+    print("%(a+b)s, %(a-b)s, %(a*b)s",{"a":a, "b",b})
+ 
+yared
+if __name__ == '__main__':
+    a = int(input())
+    b = int(input())
+    print(a // b, "\n", a / b)
+    
+    
+Ezedin's solutions
+1. print(f"{a + b}\n{a - b}\n{a * b}")
+2. print(f"{a // b}\n{a / b}")
+3. [print(i, end="") for i in range(1, n + 1)]
+4. def swap_case(s):
+    return "".join([i.lower() if i.isupper() else i.upper() for i in s])
+5. def print_full_name(first, last):
+    print(f"Hello {first} {last}! You just delved into python.")
+6. def isPalindrome(s: int) -> bool:
+    return str(s) == str(s)[::-1]
+7. from os import path
+   def longestCommonPrefix(strs: List[str]) -> str:
+    return path.commonprefix(strs)
+
+//Nebiat solution
+if __name__ == '__main__':
+    a = int(input())
+    b = int(input())
+    print(a+b)
+    print(a-b)
+    print(a*b)
+
+2.Division
+yohans hailu
+if __name__ == '__main__':
+    a = int(input())
+    b = int(input())
+    print(a//b)
+    print(a/b)
+ermias mulugeta
+if __name__ == '__main__':
+    a = int(input())
+    b = int(input())
+    print("%(a//b)s, %(a/b)",{"a":a,"b",b})
+  
+//Nebiat solution
+if __name__ == '__main__':
+    a = int(input())
+    b = int(input())
+    print(a//b)
+    print(a/b)
+
+
+3.Print Function
+yared 
+def swap_case(s):
+    new_s = ''
+    for letter in s:
+        pos = ord(letter)
+        if pos > 95:
+            new_s += chr(pos - 32)
+        elif 64 < pos < 96:
+            new_s += chr(pos + 32)
+        else:
+            new_s += letter
+    return  new_s
+
+Atsnagn
+def swap_case(s):
+    return s.swapcase()
+problem 3
+print("".join([str(i+1) for i in range(n)]))
+Ermias
+if __name__ == '__main__':
+    n = int(input())
+    for i in range(1,n+1):
+        print(i,end='')
+
+
+4.sWAP cASE
+yohans hailu
+def split_and_join(line):
+    # write your code here
+    return "-".join(line.split())
+Ermias
+def swap_case(s):
+    res = []
+    for ch in s:
+        if ch.isupper():
+            res.append(ch.lower())
+        else:
+            res.append(ch.upper())
+    return res
+    return "".join(res)
+
+5.
+def split_and_join(line):
+    return "-".join(line.split())
+ermias mulugeta
+def print_full_name(first, last):
+   print("Hello " + first_name + " " + last_name + "! You just delved into python.")
+
+if __name__ == '__main__':
+    first_name = input()
+    last_name = input()
+    print_full_name(first_name, last_name)
+
+yohans hailu
+def print_full_name(first, last):
+    # Write your code here
+    print("Hello", first, last, end = "")
+    print("!", "You just delved into python.")
+    
+yared
+def print_full_name(first, last):
+    print(f"Hello {first} {last} ! You just delved into python.")
+    
+def print_full_name(first, last):
+    print("Hello {} {}! You just delved into python.".format(first,last))
+    
+natnael
+
+1,
+if __name__ == '__main__':
+    a = int(input())
+    b = int(input())
+    print(a+b)
+    print(a-b)
+    print(a*b)
+2,
+if __name__ == '__main__':
+    a = int(input())
+    b = int(input())
+    print(a//b)
+    print(a/b)
+3,
+if __name__ == '__main__':
+    n = int(input())
+    for i in range(1, n+1):
+        print(i, end="")
+4,
+5,
+def split_and_join(line):
+    a  = line.split(" ")
+    a = "-".join(a)
+    return a
+
+if __name__ == '__main__':
+    line = input()
+    result = split_and_join(line)
+    print(result)
+6,
+def print_full_name(first, last):
+    print(f'Hello {first} {last}! You just delved into python.')
+    
+if __name__ == '__main__':
+    first_name = input()
+    last_name = input()
+    print_full_name(first_name, last_name)
+    
+    
+'''
+
+
+//Biruk 
+
+//Leetcode 1
+class Solution:
+    def isPalindrome(self, x: int) -> bool:
+        
+        if x<0:
+            return False
+        s=str(x)
+        
+        i,j= 0,len(s)-1
+        
+        while j>i:
+            if s[i]!=s[j]:
+                return False
+            i+=1
+            j-=1
+        return True
+
+
+// Leetcode 2
+class Solution:
+    def longestCommonPrefix(self, strs: List[str]) -> str:        
+        smallest= strs[0]
+        for i in strs:
+            if len(i)<len(smallest):
+                smallest=i
+        pre = ""    
+        pre = []
+        
+        for i in range(len(smallest)):        
+            for j in strs:
+                if j[i] != smallest[i]:
+                    return pre
+            pre+=smallest[i]
+            pre.append(smallest[i])
+        # return joining them
+        return pre
+    
+// Natnael LeetCode 1
+
+class Solution:
+    def isPalindrome(self, x: int) -> bool:
+        strx = str(x)
+        rv = strx[::-1]
+        return rv == strx
+
+
+
+
+
+ermias solution 
+class Solution:
+    def isPalindrome(self, x: int) -> bool:
+        before_reversed=str(x)
+        after_reversed=(list(reversed(before_reversed)))
+        joined_str=''.join(after_reversed)
+        
+        if (before_reversed==joined_str):
+                        return True
+        else:
+                        return False
+//pr
+
+           if __name__ == '__main__':
+    n = int(input())
+    x='1';
+    for i in range(2,n+1):
+        x=x+str(i);
+    print(x)
+'''
+yared
+ def isPalindrome(self, x: int) -> bool:
+        num = str(x)
+        i,j = 0, len(num)-1
+        while i < len(num) and i != j:
+            if num[i] != num[j]:
+                return False
+            i += 1
+            j -= 1
+        return True
+        
+yared     
+def longestCommonPrefix(self, strs: List[str]) -> str:
+    shortest = min(strs, key=len)
+    for idx,char in enumerate(shortest):
+        for word in strs:
+            if word[idx] != char:
+                return shortest[:idx]
+    return shortest
+        
+
+ yohans hailu
+ ------------
+ def isPalindrome(self, x: int) -> bool:
+        return str(x) == "".join(reversed(str(x)))
+
+ def longestCommonPrefix(self, strs: List[str]) -> str:
+        ln = min(map(len, strs)) 
+        for s in strs:
+            i = 0
+            
+            while i < ln and s[i] == strs[0][i]:
+                i += 1
+            ln = i
+            
+        return strs[0][:ln]
+'''
+
+https://leetcode.com/problems/two-sum/
+
+using dictionary
+
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        d = {}
+        for i, num in enumerate(nums):
+            if target - num in d:
+                return [d[target - num], i]
+            d[num] = i
+
+            

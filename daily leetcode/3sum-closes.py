@@ -73,4 +73,3 @@ class Solution:
         return ans
 
 # using binary search and two pointers
-class Solution:
