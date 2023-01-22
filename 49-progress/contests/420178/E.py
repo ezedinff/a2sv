@@ -27,32 +27,6 @@ output
 Note
 In the sample case the better way is to use the secret technique at the beginning of the third minute. Then the number of theorems Mishka will be able to write down will be equal to 16.
 '''
-'''
-s = input().split()
-time = int(s[1])
-lec = input().split()
-sleep = input().split()
-def theorem(time, lec, sleep):
-    tot=0
-    # calculating theorem count
-    for i in range(len(lec)):
-        if sleep[i]=="1":
-            tot+= int(lec[i])
- 
-    maxTot=tot
-    temp=tot
-    l=0
-    for i in range(len(lec)):
-        if sleep[i]=='0':
-            temp += int(lec[i])
-        if i>=time:
-            if sleep[l]=='0':
-                temp-= int(lec[l])
-            l+=1
-        maxTot= max(maxTot, temp)
-    return maxTot
-print(theorem(time, lec, sleep))
-'''
 
 def inputs():
     n, k = map(int, input().split()) # n is the number of minutes, k is the number of minutes you can keep Mishka awake
