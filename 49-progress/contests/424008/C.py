@@ -70,6 +70,13 @@ def canRearrange(s: str) -> str:
         return s[0] + s[2:] + s[1]
 
 
+# explanation:
+# if all the letters are the same, then it is impossible to rearrange them to make a good string
+# if the string is not a palindrome, then we can rearrange the letters to make a good string
+# if the string is a palindrome, then we can rearrange the letters to make a good string by moving
+# the middle letter to the end
+
+
 
 class Test(unittest.TestCase):
     def test1(self):

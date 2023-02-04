@@ -8,7 +8,8 @@ Mahmoud has 𝑛
  line segments, the 𝑖
 -th of them has length 𝑎𝑖
 . Ehab challenged him to use exactly 3
- line segments to form a non-degenerate triangle. Mahmoud doesn't accept challenges unless he is sure he can win, so he asked you to tell him if he should accept the challenge. Given the lengths of the line segments, check if he can choose exactly 3
+ line segments to form a non-degenerate triangle. Mahmoud doesn't accept challenges unless he is sure he can win, so he asked you to tell him if he should accept the challenge.
+  Given the lengths of the line segments, check if he can choose exactly 3
  of them to form a non-degenerate triangle.
 
 Mahmoud should use exactly 3
@@ -54,10 +55,19 @@ def canFormTriangle(a: List[int]) -> bool:
         if a[i] + a[i + 1] > a[i + 2]:
             return True
     return False
+# explanation:
+# if the sum of the smallest two elements is greater than the largest element, then we can form a triangle
+
+# why till i + 2?
+# because we need to check if the sum of the smallest two elements is greater than the largest element
 
 def main():
     n, a = get_inputs()
     print('YES' if canFormTriangle(a) else 'NO')
+
+# why sort the array?
+# because if we sort the array,
+# we can check if the sum of the smallest two elements is greater than the largest element
 
 if __name__ == '__main__':
     main()

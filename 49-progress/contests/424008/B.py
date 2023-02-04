@@ -53,6 +53,9 @@ def canDefeatDragons(s: int, dragons: List[List[int]]) -> bool:
         s += y
     return True
 
+# why sort the dragons by their strength?
+# because if we fight the dragons in order of their strength, we will always have enough strength to defeat them
+
 def get_inputs() -> List[int]:
     s, n = map(int, input().split())
     dragons = [list(map(int, input().split())) for _ in range(n)]

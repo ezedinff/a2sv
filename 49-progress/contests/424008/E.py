@@ -146,29 +146,46 @@ The sum of the first six elements of 𝑏
 .
 
 '''
-import unittest
 
-def solve(a, n):
+import sys
+import math
+
+def solve():
+    n = int(input())
+    a = list(map(int, input().split()))
     if sum(a) == 0:
-        return 'NO'
-    return 'YES'
+        print("NO")
+        return
+    print("YES")
     if sum(a) > 0:
         a.sort(reverse=True)
     else:
         a.sort()
     print(*a)
 
+# explanation of the code
+# if the sum of the array is 0, then the answer is NO
+# if the sum of the array is positive, then sort the array in descending order
+# if the sum of the array is negative, then sort the array in ascending order
+# print the array
+
+# explanation of the question
+# we have to create an array b such that
+# 1. b is a rearrangement of a
+# 2. the sum of the first k elements of b is not 0 for all k from 1 to n
+
+
 def main():
     t = int(input())
     for _ in range(t):
-        n = int(input())
-        a = list(map(int, input().split()))
-        print(solve(a, n))
+        solve()
 
-class Test(unittest.TestCase):
-    def test(self):
-        assert solve([1, -2, 3, -4], 4) == 'YES'
-        assert solve([0, 0, 0], 3) == 'NO'
 
-if __name__ == '__main__':
-    unittest.main()
+'''
+The prompt describes multiple test cases, each with an array of integers,
+where each test case requires the creation of another array of integers
+that contains the same values and each value appears the same number of times.
+The new array must satisfy the condition that the sum of the first k elements must
+not be zero for all values of k. If such an array can't be created, the output must
+be "NO". If such an array can be created, the output must be "YES" followed by the new array.
+'''
