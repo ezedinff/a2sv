@@ -1,5 +1,6 @@
-from collections import Counter
+# https://codeforces.com/problemset/problem/977/C
 
+from collections import Counter
 
 def main():
     n, k = map(int, input().split())
@@ -8,10 +9,17 @@ def main():
 
 def solve(n, k, nums):
     nums.sort()
-    for i in range(n - k + 1):
-        if nums[i + k - 1] - nums[i] <= 1:
-            return nums[i + k - 1]
-    return -1
+    if k == 0 and nums[0] > 1:
+        return 1
+    elif k == 0 and nums[0] == 1:
+        return -1
+    elif k <= n - 1:
+        if nums[k - 1] != nums[k]:
+            return nums[k - 1]
+        else:
+            return -1
+    elif k == n:
+        return nums[k - 1]
 
         
 
